@@ -1,5 +1,5 @@
 // Presentation Only Code
-// by Atanas Ilinov
+// by Atanas Ilinov, Jess Rufus
 
 // Libraries
 #include <Servo.h>                // servo library
@@ -13,6 +13,7 @@ int buttonPinOn = 3;              // button that starts the sequence.
 Servo servoDoors1;                // create servo object to control front doors servo
 Servo servoDoors2;                // create servo object to control back doors servo
 int pos = 180;                    // variable to store the servo position
+Servo catapault;                  // variable to store catapault servo
 
 // set up LED ring
 #define PIN        4              // LED ring
@@ -32,6 +33,9 @@ void setup() {
 
   servoDoors1.attach(7);          // front doors servo
   servoDoors2.attach(8);          // back doors servo
+
+  catapault.attach(5);                // catapault servo pin
+  resetCatapult();
 
   sound.speakerPin = 9;           // speaker pin
   SD.begin(SD_ChipSelectPin);                   // initialize SD card module
@@ -67,6 +71,10 @@ void loop() {
       delay(100);
     }
 
+    // hit the drum
+    shoot();
+    resetCatapult();
+
     // during the presentation you get one minute to take care of plant (spray it with water)
     delay(6000);
 
@@ -82,8 +90,6 @@ void loop() {
       servoDoors2.write(pos);
       delay(100);                          // waits 15ms for the servo to reach the position
     }
-
-
 
     //sunset sequence
     if(sunsetOn == 1){
@@ -118,4 +124,15 @@ void loop() {
       }
   }
 }
+
+void resetCatapult() {
+  catapault.write(0);
+  delay(500);
+}
+
+void shoot() {
+  catapault.write(180);
+  delay(500);
+}
+
 }
